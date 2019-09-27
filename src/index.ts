@@ -5,7 +5,8 @@ export class App
     private game:PIXI.Application;
     private container:PIXI.Container;
     private bunny:PIXI.Sprite;
-
+    private headText:PIXI.Text;
+    private descriptionText:PIXI.Text;
     constructor() 
     {
         window.onload = () => 
@@ -26,6 +27,32 @@ export class App
 
         this.container = new PIXI.Container();
         this.game.stage.addChild(this.container);
+
+        this.headText = new PIXI.Text('Start Playing The Game ', {
+            font: "bold 64px Roboto", // Set  style, size and font
+            fill: '#3498db', // Set fill color to blue
+            align: 'center', // Center align the text, since it's multiline
+            stroke: '#34495e', // Set stroke color to a dark blue gray color
+            strokeThickness: 20, // Set stroke thickness to 20
+            lineJoin: 'round' // Set the lineJoin to round
+        });
+
+        this.descriptionText = new PIXI.Text('Start Playing The Game ', {
+            font: "bold 64px Roboto", // Set  style, size and font
+            fill: '#3498db', // Set fill color to blue
+            align: 'center', // Center align the text, since it's multiline
+            stroke: '#34495e', // Set stroke color to a dark blue gray color
+            strokeThickness: 20, // Set stroke thickness to 20
+            lineJoin: 'round' // Set the lineJoin to round
+        })
+
+        
+
+
+        this.container.addChild(this.headText)
+        this.container.addChild(this.descriptionText)
+
+       
         var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
 
         this.bunny = new PIXI.Sprite(textureBunny);
@@ -35,10 +62,7 @@ export class App
 
         
         // Move container to the center
-        this.bunny.x = this.game.screen.width / 2;
-        this.bunny.y = this.game.screen.height -    100;
-
-        //this.RotateMyBunny()
+        this.LocateObjects()
 
         window.onresize = this.onResize;
         window.onkeydown = this.KeyDown;
@@ -48,9 +72,19 @@ export class App
     private onResize = () => {   
         this.game.renderer.resize(window.innerWidth, window.innerHeight);
         // Move container to the center
-        this.container.x = window.innerWidth / 2;
-        this.container.y = window.innerHeight / 2;
+        this.LocateObjects()
         
+    }
+
+    private LocateObjects(){
+        this.bunny.x = window.innerWidth / 2 - 50;
+        this.bunny.y = window.innerHeight - 100;
+
+        this.headText.x = window.innerWidth / 3;
+        this.headText.y = window.innerHeight / 2;
+        
+        this.descriptionText.x =  window.innerWidth/ 3;
+        this.descriptionText.y = window.innerHeight / 2.3;
     }
 
     private KeyDown = (key:any) => {
@@ -86,6 +120,7 @@ export class App
         const {x,y} = this.container
         console.log(x,y)
         console.log(window.innerWidth, window.innerHeight);
+        console.log(key)
     }
 
     private BunnyAttack = () =>{
@@ -95,10 +130,12 @@ export class App
         fireBall.y = this.bunny.y +50
         this.container.addChild(fireBall);
 
-        setInterval(()=>{
-            
-                fireBall.y = fireBall.y -10
-                
+        var timer = setInterval(()=>{
+            fireBall.y = fireBall.y -20 
+            if(fireBall.y <= -50) { // if fireball exits from screen then delete it for performance.
+                clearInterval(timer) // delete timer
+                this.container.removeChild(fireBall) // delete fireball
+            }
         }, 100)
     }
 
