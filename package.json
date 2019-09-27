@@ -1,0 +1,32 @@
+{
+  "name": "softgames-tasks",
+  "version": "1.0.0",
+  "description": "Interview tasks for Softgames.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --mode development",
+    "build": "webpack --mode production",
+    "liveServer": "npx live-server",
+    "tscWatcher": "watchify --debug -p [ tsify ] .\\src\\index.ts -o ./dist/bundle.js",
+    "watch": "npx npm-run-all -p tscWatcher liveServer"
+  },
+  "author": "MHT",
+  "license": "ISC",
+  "dependencies": {
+    "pixi-particles": "^4.1.2",
+    "pixi-timeout": "^1.0.4",
+    "pixi.js": "^5.1.5"
+  },
+  "devDependencies": {
+    "file-loader": "^4.2.0",
+    "live-server": "^1.2.1",
+    "npm-run-all": "^4.1.5",
+    "ts-loader": "^6.1.2",
+    "tsify": "^4.0.1",
+    "typescript": "^3.6.3",
+    "watchify": "^3.11.1",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1"
+  }
+}
