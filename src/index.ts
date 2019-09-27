@@ -33,11 +33,11 @@ export class App
         this.bunny.height = 100
         this.container.addChild(this.bunny);
 
-        /*
+        
         // Move container to the center
-        this.container.x = this.game.screen.width / 2;
-        this.container.y = this.game.screen.height -    100;
-*/
+        this.bunny.x = this.game.screen.width / 2;
+        this.bunny.y = this.game.screen.height -    100;
+
         //this.RotateMyBunny()
 
         window.onresize = this.onResize;
