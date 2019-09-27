@@ -37,11 +37,10 @@ export class App
             lineJoin: 'round' // Set the lineJoin to round
         });
 
-        this.descriptionText = new PIXI.Text('Start Playing The Game ', {
+        this.descriptionText = new PIXI.Text('Space attacks, arrows moves! ', {
             font: "bold 64px Roboto", // Set  style, size and font
-            fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
-            stroke: '#34495e', // Set stroke color to a dark blue gray color
+            stroke: '#3498db', // Set stroke color to a dark blue gray color
             strokeThickness: 20, // Set stroke thickness to 20
             lineJoin: 'round' // Set the lineJoin to round
         })
@@ -81,10 +80,10 @@ export class App
         this.bunny.y = window.innerHeight - 100;
 
         this.headText.x = window.innerWidth / 3;
-        this.headText.y = window.innerHeight / 2;
+        this.headText.y = window.innerHeight / 2.3;
         
         this.descriptionText.x =  window.innerWidth/ 3;
-        this.descriptionText.y = window.innerHeight / 2.3;
+        this.descriptionText.y = window.innerHeight / 2;
     }
 
     private KeyDown = (key:any) => {
@@ -137,14 +136,6 @@ export class App
                 this.container.removeChild(fireBall) // delete fireball
             }
         }, 100)
-    }
-
-    private RotateMyBunny = () =>{
-        this.game.ticker.add((delta) => {
-            // rotate the container!
-            // use delta to create frame-independent transform
-            this.container.rotation -= 0.02 * delta;
-        });
     }
 }
 
