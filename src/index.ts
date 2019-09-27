@@ -4,6 +4,7 @@ export class App
 {
     private game:PIXI.Application;
     private container:PIXI.Container;
+    private bunny:PIXI.Sprite;
 
     constructor() 
     {
@@ -25,17 +26,18 @@ export class App
 
         this.container = new PIXI.Container();
         this.game.stage.addChild(this.container);
-        var texture:any = PIXI.Texture.from('assets/bunny.png');
+        var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
 
-        const bunny = new PIXI.Sprite(texture);
-        bunny.width = 100
-        bunny.height = 100
-        this.container.addChild(bunny);
+        this.bunny = new PIXI.Sprite(textureBunny);
+        this.bunny.width = 100
+        this.bunny.height = 100
+        this.container.addChild(this.bunny);
 
+        /*
         // Move container to the center
         this.container.x = this.game.screen.width / 2;
-        this.container.y = this.game.screen.height / 2;
-
+        this.container.y = this.game.screen.height -    100;
+*/
         //this.RotateMyBunny()
 
         window.onresize = this.onResize;
@@ -54,26 +56,27 @@ export class App
     private KeyDown = (key:any) => {
         switch (key.code) {
             case 'ArrowUp':
-                if(this.container.y > 0){
-                    this.container.y = this.container.y -10
+                if(this.bunny.y > 0){
+                    this.bunny.y = this.bunny.y -10
                 }
                 break;
             case 'ArrowDown':
-                if(window.innerHeight -110> this.container.y){
-                    this.container.y = this.container.y +10
+                if(window.innerHeight -110> this.bunny.y){
+                    this.bunny.y = this.bunny.y +10
                 }
                 break;
             case 'ArrowRight':
-                if(window.innerWidth -110> this.container.x){
-                    this.container.x = this.container.x +10
+                if(window.innerWidth -110> this.bunny.x){
+                    this.bunny.x = this.bunny.x +10
                 }
                 break;
             case 'ArrowLeft':
-                if(this.container.x > 0){
-                    this.container.x = this.container.x -10
+                if(this.bunny.x > 0){
+                    this.bunny.x = this.bunny.x -10
                 }
                 break;
             case 'Space':
+                this.BunnyAttack()
                 console.log('Attack!!!')
                 break;
             default:
@@ -83,6 +86,20 @@ export class App
         const {x,y} = this.container
         console.log(x,y)
         console.log(window.innerWidth, window.innerHeight);
+    }
+
+    private BunnyAttack = () =>{
+        var textureFirBall:any = PIXI.Texture.from('assets/fireball.png')
+        const fireBall = new PIXI.Sprite(textureFirBall)
+        fireBall.x = this.bunny.x + 25
+        fireBall.y = this.bunny.y +50
+        this.container.addChild(fireBall);
+
+        setInterval(()=>{
+            
+                fireBall.y = fireBall.y -10
+                
+        }, 100)
     }
 
     private RotateMyBunny = () =>{
