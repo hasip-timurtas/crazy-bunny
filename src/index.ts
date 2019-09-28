@@ -175,8 +175,6 @@ export class App
     private LocateObjects(){
         // when resize the screen then all the objects will resize again: Bunny, texts and boxes
         this.game.renderer.resize(window.innerWidth, window.innerHeight);
-        this.bunnyContainer.x = window.innerWidth / 2 - 50;
-        this.bunnyContainer.y = window.innerHeight - 100;
 
         if(!this.started){
             // if not started and move the screen then the text will relocate.
