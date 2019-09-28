@@ -4,6 +4,7 @@ export class App
 {
     private game:PIXI.Application;
     private container:PIXI.Container;
+    private bunnyContainer:PIXI.Container
     private bunny:PIXI.Sprite;
     private headText:PIXI.Text;
     private started:boolean;
@@ -32,6 +33,7 @@ export class App
         });
 
         this.container = new PIXI.Container();
+        this.bunnyContainer = new PIXI.Container();
         this.game.stage.addChild(this.container);
 
         this.AddDescriptions() // Descriptions
@@ -43,8 +45,8 @@ export class App
 
         window.onresize = this.onResize;
         window.onkeydown = this.KeyDown;
-        window.onclick = this.windowClick;
         div.appendChild(this.game.view);
+        (<any>window).bunny = this.bunny
     }
 
     private AddDescriptions = () => {
@@ -74,33 +76,46 @@ export class App
         this.bunny = new PIXI.Sprite(textureBunny);
         this.bunny.width = 100
         this.bunny.height = 100
+        this.bunny.anchor.set(0.5)
+        this.bunny.interactive = true
+        this.bunnyContainer.x = window.innerWidth / 2 - 50;
+        this.bunnyContainer.y = window.innerHeight - 100;
+        this.bunny.on('pointertap', () =>{
+            this.Attack()
+        })
+
+
+        this.bunnyContainer.addChild(this.bunny);
+
 
         var leftArrow = new PIXI.Sprite(textureLeftArrow);
-        leftArrow.x = this.bunny.x - 20
+        leftArrow.x = this.bunny.x - 75
         leftArrow.y = this.bunny.y
         leftArrow.anchor.set(0.5)
         leftArrow.interactive = true
         leftArrow.on('pointertap', () =>{
-            if(this.bunny.x > 50){
-                this.bunny.x = this.bunny.x -10
+            if(this.bunnyContainer.x > 50){
+                this.bunnyContainer.x = this.bunnyContainer.x -10
             }
         })
 
         var rightArrow = new PIXI.Sprite(textureRightArrow);
-        rightArrow.x = this.bunny.x + 20
+        rightArrow.x = this.bunny.x + 75
         rightArrow.y = this.bunny.y
         rightArrow.anchor.set(0.5)
         rightArrow.interactive = true
         rightArrow.on('pointertap', () =>{
-            if(window.innerWidth -70> this.bunny.x){
-                this.bunny.x = this.bunny.x +10
+            if(window.innerWidth -70> this.bunnyContainer.x){
+                this.bunnyContainer.x = this.bunnyContainer.x +10
             }
         })
 
-        this.bunny.anchor.set(0.5)
-        this.bunny.addChild(leftArrow)
-        this.bunny.addChild(rightArrow)
-        this.container.addChild(this.bunny);
+        console.log(this.bunny.x, this.bunny.y, rightArrow.x, rightArrow.y)
+        
+        this.bunnyContainer.addChild(leftArrow)
+        this.bunnyContainer.addChild(rightArrow)
+        this.container.addChild(this.bunnyContainer)
+        
     }
 
     private onResize = () => {
@@ -112,8 +127,8 @@ export class App
     }
 
     private LocateObjects(){
-        this.bunny.x = window.innerWidth / 2 - 50;
-        this.bunny.y = window.innerHeight - 100;
+        this.bunnyContainer.x = window.innerWidth / 2 - 50;
+        this.bunnyContainer.y = window.innerHeight - 100;
 
         if(!this.started){
             //this.headText.style.fontSize = window.innerWidth / 30
@@ -142,13 +157,13 @@ export class App
                 }
                 break;
             case 'ArrowRight':
-                if(window.innerWidth -70> this.bunny.x){
-                    this.bunny.x = this.bunny.x +10
+                if(window.innerWidth -70> this.bunnyContainer.x){
+                    this.bunnyContainer.x = this.bunnyContainer.x +10
                 }
                 break;
             case 'ArrowLeft':
-                if(this.bunny.x > 50){
-                    this.bunny.x = this.bunny.x -10
+                if(this.bunnyContainer.x > 50){
+                    this.bunnyContainer.x = this.bunnyContainer.x -10
                 }
                 break;
             case 'Space':
@@ -158,10 +173,6 @@ export class App
                 console.log(key)
                 break;
         }
-    }
-
-    private windowClick = () => {
-        this.Attack()
     }
 
     private Attack = ()=>{
@@ -174,8 +185,8 @@ export class App
     private PrepareAttack = () =>{
         var textureFirBall:any = PIXI.Texture.from('assets/fireball.png')
         const fireBall = new PIXI.Sprite(textureFirBall)
-        fireBall.x = this.bunny.x - 20
-        fireBall.y = this.bunny.y - 5
+        fireBall.x = this.bunnyContainer.x - 20
+        fireBall.y = this.bunnyContainer.y - 5
 
         this.container.addChild(fireBall);
 
