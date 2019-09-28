@@ -7,7 +7,8 @@ export class App
     private bunny:PIXI.Sprite;
     private headText:PIXI.Text;
     private descriptionText:PIXI.Text;
-    private started: boolean;
+    private started:boolean;
+    private boxes:Array<PIXI.Sprite>;
     constructor() 
     {
         window.onload = () => 
@@ -33,7 +34,6 @@ export class App
 
         this.AddBunny() // Our bunny :) 
 
-        
         // Move container to the center
         this.LocateObjects()
 
@@ -68,6 +68,10 @@ export class App
 
     private AddBunny = () =>{
         var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
+        //var textureBunny:any = PIXI.Texture.from('assets/choco/choco_walk.png');
+        //base.setSize(64, 64) // Original image size
+        var rect = new PIXI.Rectangle(0,0, 64,64)
+        //textureBunny.frame  = rect
 
         this.bunny = new PIXI.Sprite(textureBunny);
         this.bunny.width = 100
@@ -75,11 +79,12 @@ export class App
         this.container.addChild(this.bunny);
     }
 
-    private onResize = () => {   
+    private onResize = () => {
+        /*
+        when resize the screen then all the objects will resize again: Bunny, texts and boxes
+        */
         this.game.renderer.resize(window.innerWidth, window.innerHeight);
-        // Move container to the center
         this.LocateObjects()
-        
     }
 
     private LocateObjects(){
@@ -96,6 +101,10 @@ export class App
             this.descriptionText.y = window.innerHeight / 2;
         }
         
+        if(this.started){
+            this.boxes.forEach(e=> this.container.removeChild(e)) // remove boxes
+            this.StartEnemies()
+        }
     }
 
     private KeyDown = (key:any) => {
@@ -144,11 +153,29 @@ export class App
         this.container.addChild(fireBall);
 
         var timer = setInterval(()=>{
-            fireBall.y = fireBall.y -20 
+            fireBall.y = fireBall.y -20
+
+            for (let i = 0; i < this.boxes.length; i++) {
+                const box =  this.boxes[i];
+                var inYarea = fireBall.y > box.y && fireBall.y < box.y + 54
+                var inXarea = fireBall.x + 35 > box.x && fireBall.x < box.x + 54
+                console.log("fireballx ve box x: ", fireBall.x , box.x )
+                if(inYarea && inXarea){
+                     
+                    this.container.removeChild(fireBall)
+                    this.container.removeChild(box)
+                    clearInterval(timer)
+                    this.boxes = this.boxes.filter(e=> e != box)
+                    if(this.boxes.length == 0) this.GameOver()
+                }
+            }
+            
             if(fireBall.y <= -50) { // if fireball exits from screen then delete it for performance.
                 clearInterval(timer) // delete timer
                 this.container.removeChild(fireBall) // delete fireball
             }
+
+            console.log(timer)
         }, 100)
     }
 
@@ -163,19 +190,28 @@ export class App
 
     private StartEnemies = () => {
         var textureBox:any = PIXI.Texture.from('assets/box64x64.png')
-        for (let i = 0; i < 10; i++) {
+        this.boxes = new Array<PIXI.Sprite>();
+        for (let i = 0; i < 5; i++) {
             var box = new PIXI.Sprite(textureBox)
-            var randomX = Math.floor(Math.random() * (window.innerWidth))
+            var randomX = Math.floor(Math.random() * (window.innerWidth - 100))
             var randomY = Math.floor(Math.random() * (window.innerHeight - 200))
             console.log(window.innerWidth, window.innerHeight,  randomX, randomY);
             
             box.x = randomX
             box.y = randomY
+            this.boxes.push(box)
             this.container.addChild(box)
+            console.log(box)
         }
         
         // x sıfırdan büyük  window.innerWidth-64 den küçük
         // y sıfırdan büyük window.innerHeight-64 den küçük
+    }
+
+    private GameOver = () =>{
+        this.started = false
+        this.AddDescriptions()
+        this.LocateObjects()
     }
 
 }
