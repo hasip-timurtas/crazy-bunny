@@ -95,6 +95,7 @@ export class App
         leftArrow.y = this.bunny.y
         leftArrow.anchor.set(0.5)
         leftArrow.interactive = true
+        // Set left arrow click event
         leftArrow.on('pointertap', () =>{
             this.MoveBunnyLeft()
         })
@@ -105,6 +106,7 @@ export class App
         rightArrow.y = this.bunny.y
         rightArrow.anchor.set(0.5)
         rightArrow.interactive = true
+        // Set right arrow click event
         rightArrow.on('pointertap', () =>{
             this.MoveBunnyRight()
         })
@@ -128,6 +130,7 @@ export class App
         this.bunnyContainer.y = window.innerHeight - 100;
 
         if(!this.started){
+            // if not started and move the screen then the text will relocate.
             this.headText.x = window.innerWidth / 2.3;
             this.headText.y = window.innerHeight / 2.3;
             this.headText.anchor.set(0.5)
@@ -211,22 +214,23 @@ export class App
             fireBall.y = fireBall.y -20
             for (let i = 0; i < this.boxes.length; i++) {
                 const box =  this.boxes[i];
-                var inYarea = fireBall.y > box.y && fireBall.y < box.y + 54
-                var inXarea = fireBall.x + 35 > box.x && fireBall.x < box.x + 54
-                console.log("fireballx ve box x: ", fireBall.x , box.x )
-                if(inYarea && inXarea){
-                     
-                    this.mainContainer.removeChild(fireBall)
+                // if the fireball enters in box's Y(height) area 
+                var inYarea = fireBall.y > box.y && fireBall.y < box.y + 54  // +54 because height of the fireball
+                // if the fireball enters in box's X(width) area
+                var inXarea = fireBall.x + 35 > box.x && fireBall.x < box.x + 54 // + 54 becayse width of the fireball
+                if(inYarea && inXarea){  // resultly if the fireball enters in the box area 
+                    // then remove the box, remove the fireball. And remove timer which was moving fireball
                     this.mainContainer.removeChild(box)
+                    this.boxes = this.boxes.filter(e=> e != box) // remove the box from boxlist
+                    this.mainContainer.removeChild(fireBall)
                     clearInterval(timer)
-                    this.boxes = this.boxes.filter(e=> e != box)
-                    if(this.boxes.length == 0) this.GameOver()
+                    if(this.boxes.length == 0) this.GameOver() // if all the boxes finishes then game ower. Restart the game.
                 }
             }
             
-            if(fireBall.y <= -50) { // if fireball exits from screen then delete it for performance.
-                clearInterval(timer) // delete timer
+            if(fireBall.y <= -54) { // if fireball exits from screen then delete it for performance. -54 becase height of the fireball. we want it to exits first then we remove it. 
                 this.mainContainer.removeChild(fireBall) // delete fireball
+                clearInterval(timer) // delete timer
             }
 
             console.log(timer)
@@ -267,7 +271,8 @@ export class App
         this.LocateObjects()
     }
 
-    private WriteFps():void{        
+    private WriteFps():void{
+        // Here we write FPS in the top of the page. every 1 second.
         var headerContainer:HTMLElement = document.getElementById("header");
         setInterval(()=>{
             var fps:string = this.game.ticker.FPS.toFixed(2);
