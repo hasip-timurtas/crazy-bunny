@@ -1,7 +1,7 @@
 {
-  "name": "softgames-tasks",
+  "name": "Games",
   "version": "1.0.0",
-  "description": "Interview tasks for Softgames.",
+  "description": "Game.",
   "main": "index.js",
   "scripts": {
     "start": "webpack --mode development",

@@ -44,7 +44,7 @@ export class App
     }
 
     private AddDescriptions = () => {
-        this.headText = new PIXI.Text('Angry Bunny  🙃', {
+        this.headText = new PIXI.Text('Crazy Bunny  🙃', {
             font: "bold 64px Roboto", // Set  style, size and font
             fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
@@ -53,7 +53,7 @@ export class App
             lineJoin: 'round' // Set the lineJoin to round
         });
 
-        this.descriptionText = new PIXI.Text('Space and click attacks, arrows moves! \n Press any button for start.', {
+        this.descriptionText = new PIXI.Text('Space and click attacks, arrows moves! \n Press here to start.', {
             font: "bold 64px Roboto", // Set  style, size and font
             align: 'center', // Center align the text, since it's multiline
             stroke: '#3498db', // Set stroke color to a dark blue gray color
@@ -61,6 +61,10 @@ export class App
             lineJoin: 'round' // Set the lineJoin to round
         })
 
+        this.descriptionText.interactive = true
+        this.descriptionText.on('click', ()=>{
+            this.RemoveDesctiptionsAndStart()
+        })
         
         this.container.addChild(this.headText)
         this.container.addChild(this.descriptionText)
@@ -137,7 +141,6 @@ export class App
                 console.log(key)
                 break;
         }
-        this.RemoveDesctiptionsAndStart()
     }
 
     private windowClick = () => {
