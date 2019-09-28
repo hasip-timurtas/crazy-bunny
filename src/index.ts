@@ -28,7 +28,8 @@ export class App
         this.game = new PIXI.Application({
             backgroundColor: 0x222222,
             height: window.innerHeight,
-            width: window.innerWidth
+            width: window.innerWidth,
+            resolution: window.devicePixelRatio
         });
 
         this.mainContainer = new PIXI.Container();
