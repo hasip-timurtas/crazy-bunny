@@ -8,18 +8,22 @@ export class App
     private headText:PIXI.Text;
     private started:boolean;
     private boxes:Array<PIXI.Sprite>;
+    private headerContainer:HTMLElement; 
 
     constructor() 
     {
         window.onload = () => 
         {
             this.CreateRenderer();
+            setInterval(()=>this.updateFPS(), 1000)
+            ;
         };
     }
 
     private CreateRenderer(): void 
     {
         var div:HTMLElement = document.getElementById("container");
+        this.headerContainer = document.getElementById("header");
         this.game = new PIXI.Application(
         {
             backgroundColor: 0x222222,
@@ -44,7 +48,7 @@ export class App
     }
 
     private AddDescriptions = () => {
-        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n Press here to start.', {
+        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n PRESS HERE TO START.', {
             font: "bold 64px Roboto", // Set  style, size and font
             fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
@@ -234,6 +238,13 @@ export class App
         this.started = false
         this.AddDescriptions()
         this.LocateObjects()
+    }
+
+    private updateFPS():void
+    {
+        var fps:string = this.game.ticker.FPS.toFixed(2);
+
+        this.headerContainer.innerHTML = "FPS: " + fps 
     }
 
 }
