@@ -11,7 +11,6 @@ export class App
     private boxes:Array<PIXI.Sprite>; // the enemy! our bunny will attack with fire and kill them all.. 
     private boxAmount:number = 5 // amount of box(enemy) we want to create.
     private dragging:boolean;
-    private alpha:number;
     private data:any;
     constructor() 
     {
@@ -49,7 +48,7 @@ export class App
 
     private AddHeadText = () => {
         //Here we add our text first, The game will start when click to text.
-        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n PRESS HERE TO START.', {
+        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n you can drag and drop! \n PRESS HERE TO START.', {
             font: "bold 64px Roboto", // Set  style, size and font
             fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
@@ -143,23 +142,16 @@ export class App
         
     }
 
-    private onDragStart = (event:any) =>
-    {
-        console.log(event)
+    private onDragStart = (event:any) =>{
         // store a reference to the data
         // the reason for this is because of multitouch
         // we want to track the movement of this particular touch
         this.data = event.data;
-        this.alpha = 0.5;
         this.dragging = true;
     }
 
-    private onDragEnd = () =>
-    {
-        this.alpha = 1;
-
+    private onDragEnd = () =>{
         this.dragging = false;
-
         // set the interaction data to null
         this.data = null;
     }
@@ -325,6 +317,7 @@ export class App
 
     private GameOver = () =>{
         this.started = false
+        this.boxAmount = this.boxAmount * 2
         this.AddHeadText()
         this.LocateObjects()
     }
