@@ -70,6 +70,22 @@ export class App
 
     private CreateBunny = () =>{
         this.bunnyContainer = new PIXI.Container(); // crate our bunny container which will have bunny and it's arrow inside. also fireballs later.
+        this.bunnyContainer.interactive = true // for events
+        // BunnyContainer Drag Drop setup events
+        this.bunnyContainer
+        // events for drag start
+        .on('mousedown', this.onDragStart)
+        .on('touchstart', this.onDragStart)
+        // events for drag end
+        .on('mouseup', this.onDragEnd)
+        .on('mouseupoutside', this.onDragEnd)
+        .on('touchend', this.onDragEnd)
+        .on('touchendoutside', this.onDragEnd)
+        // events for drag move
+        .on('mousemove', this.onDragMove)
+        .on('touchmove', this.onDragMove)
+
+
         // Get assets
         var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
         var textureLeftArrow:any = PIXI.Texture.from('assets/left.png')
@@ -91,21 +107,6 @@ export class App
         this.bunny.on('pointertap', () =>{
             this.Attack()
         })
-
-        // Bunny Drag Drop
-        // setup events
-        this.bunny
-        // events for drag start
-        .on('mousedown', this.onDragStart)
-        .on('touchstart', this.onDragStart)
-        // events for drag end
-        .on('mouseup', this.onDragEnd)
-        .on('mouseupoutside', this.onDragEnd)
-        .on('touchend', this.onDragEnd)
-        .on('touchendoutside', this.onDragEnd)
-        // events for drag move
-        .on('mousemove', this.onDragMove)
-        .on('touchmove', this.onDragMove)
 
         // add bunny to bunny container
         this.bunnyContainer.addChild(this.bunny);
