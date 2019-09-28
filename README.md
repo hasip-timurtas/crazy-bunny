@@ -7,3 +7,6 @@ On Mobile: For moving click arrows next to bunny. For attack click the bunny.
 Live Here: https://hasip-timurtas.github.io/crazy-bunny/
 
 ![](usage_gif.gif)
+ 
+# HARD! 😎
+![](usage_gif2.gif)
