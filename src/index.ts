@@ -205,8 +205,9 @@ export class App
         // Prepare attack, create fireballs and throw!
         var textureFirBall:any = PIXI.Texture.from('assets/fireball.png')
         const fireBall = new PIXI.Sprite(textureFirBall)
-        fireBall.x = this.bunnyContainer.x - 20
-        fireBall.y = this.bunnyContainer.y - 5
+        // these settings for locating the fireball to bunny's head.
+        fireBall.x = this.bunnyContainer.x - 22
+        fireBall.y = this.bunnyContainer.y - 55
 
         this.mainContainer.addChild(fireBall);
 
