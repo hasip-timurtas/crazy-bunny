@@ -6,18 +6,18 @@ export class App
     private container:PIXI.Container;
     private bunny:PIXI.Sprite;
     private headText:PIXI.Text;
-    private descriptionText:PIXI.Text;
     private started:boolean;
     private boxes:Array<PIXI.Sprite>;
+
     constructor() 
     {
         window.onload = () => 
         {
-            this.createrenderer();
+            this.CreateRenderer();
         };
     }
 
-    private createrenderer(): void 
+    private CreateRenderer(): void 
     {
         var div:HTMLElement = document.getElementById("container");
         this.game = new PIXI.Application(
@@ -44,7 +44,7 @@ export class App
     }
 
     private AddDescriptions = () => {
-        this.headText = new PIXI.Text('Crazy Bunny  🙃', {
+        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n Press here to start.', {
             font: "bold 64px Roboto", // Set  style, size and font
             fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
@@ -53,33 +53,49 @@ export class App
             lineJoin: 'round' // Set the lineJoin to round
         });
 
-        this.descriptionText = new PIXI.Text('Space and click attacks, arrows moves! \n Press here to start.', {
-            font: "bold 64px Roboto", // Set  style, size and font
-            align: 'center', // Center align the text, since it's multiline
-            stroke: '#3498db', // Set stroke color to a dark blue gray color
-            strokeThickness: 20, // Set stroke thickness to 20
-            lineJoin: 'round' // Set the lineJoin to round
-        })
 
-        this.descriptionText.interactive = true
-        this.descriptionText.on('click', ()=>{
+        this.headText.interactive = true
+        this.headText.on('click', ()=>{
             this.RemoveDesctiptionsAndStart()
         })
         
         this.container.addChild(this.headText)
-        this.container.addChild(this.descriptionText)
     }
 
     private AddBunny = () =>{
         var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
-        //var textureBunny:any = PIXI.Texture.from('assets/choco/choco_walk.png');
-        //base.setSize(64, 64) // Original image size
-        var rect = new PIXI.Rectangle(0,0, 64,64)
-        //textureBunny.frame  = rect
+        var textureLeftArrow:any = PIXI.Texture.from('assets/left.png')
+        var textureRightArrow:any = PIXI.Texture.from('assets/right.png')
 
         this.bunny = new PIXI.Sprite(textureBunny);
         this.bunny.width = 100
         this.bunny.height = 100
+
+        var leftArrow = new PIXI.Sprite(textureLeftArrow);
+        leftArrow.x = this.bunny.x - 20
+        leftArrow.y = this.bunny.y
+        leftArrow.anchor.set(0.5)
+        leftArrow.interactive = true
+        leftArrow.on('click', () =>{
+            if(this.bunny.x > 50){
+                this.bunny.x = this.bunny.x -10
+            }
+        })
+
+        var rightArrow = new PIXI.Sprite(textureRightArrow);
+        rightArrow.x = this.bunny.x + 20
+        rightArrow.y = this.bunny.y
+        rightArrow.anchor.set(0.5)
+        rightArrow.interactive = true
+        rightArrow.on('click', () =>{
+            if(window.innerWidth -70> this.bunny.x){
+                this.bunny.x = this.bunny.x +10
+            }
+        })
+
+        this.bunny.anchor.set(0.5)
+        this.bunny.addChild(leftArrow)
+        this.bunny.addChild(rightArrow)
         this.container.addChild(this.bunny);
     }
 
@@ -97,12 +113,10 @@ export class App
 
         if(!this.started){
             //this.headText.style.fontSize = window.innerWidth / 30
+            
             this.headText.x = window.innerWidth / 2.3;
             this.headText.y = window.innerHeight / 2.3;
-
-            //this.descriptionText.style.fontSize = window.innerWidth / 30
-            this.descriptionText.x =  window.innerWidth/ 2.7;
-            this.descriptionText.y = window.innerHeight / 2;
+            this.headText.anchor.set(0.5)
         }
         
         if(this.started){
@@ -124,18 +138,17 @@ export class App
                 }
                 break;
             case 'ArrowRight':
-                if(window.innerWidth -110> this.bunny.x){
+                if(window.innerWidth -70> this.bunny.x){
                     this.bunny.x = this.bunny.x +10
                 }
                 break;
             case 'ArrowLeft':
-                if(this.bunny.x > 0){
+                if(this.bunny.x > 50){
                     this.bunny.x = this.bunny.x -10
                 }
                 break;
             case 'Space':
-                this.BunnyAttack()
-                console.log('Attack!!!')
+                this.Attack()
                 break;
             default:
                 console.log(key)
@@ -144,15 +157,22 @@ export class App
     }
 
     private windowClick = () => {
-        this.BunnyAttack()
-        console.log('Attack!!!')
+        this.Attack()
     }
 
-    private BunnyAttack = () =>{
+    private Attack = ()=>{
+        if(this.started){
+            this.PrepareAttack()
+            console.log('Attack!!!')
+        }
+    }
+
+    private PrepareAttack = () =>{
         var textureFirBall:any = PIXI.Texture.from('assets/fireball.png')
         const fireBall = new PIXI.Sprite(textureFirBall)
-        fireBall.x = this.bunny.x + 25
-        fireBall.y = this.bunny.y +50
+        fireBall.x = this.bunny.x - 20
+        fireBall.y = this.bunny.y - 5
+
         this.container.addChild(fireBall);
 
         var timer = setInterval(()=>{
@@ -185,7 +205,6 @@ export class App
     private RemoveDesctiptionsAndStart =  () => {
         if(!this.started){
             this.container.removeChild(this.headText)
-            this.container.removeChild(this.descriptionText)
             this.started = true
             this.StartEnemies()
         }
