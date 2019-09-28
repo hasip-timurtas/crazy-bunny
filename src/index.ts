@@ -62,6 +62,10 @@ export class App
         this.headText.on('click', ()=>{
             this.RemoveDesctiptionsAndStart()
         })
+
+        this.headText.on('touch', ()=>{
+            this.RemoveDesctiptionsAndStart()
+        })
         
         this.container.addChild(this.headText)
     }
