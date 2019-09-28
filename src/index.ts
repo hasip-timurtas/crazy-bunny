@@ -10,8 +10,8 @@ export class App
     private started:boolean; // checking if game is started. 
     private boxes:Array<PIXI.Sprite>; // the enemy! our bunny will attack with fire and kill them all.. 
     private boxAmount:number = 5 // amount of box(enemy) we want to create.
-    private dragging:boolean;
-    private data:any;
+    private dragging:boolean; // checking dragging for drag and drop.
+    private draggingData:any; // for drag and drop event data.
     constructor() 
     {
         window.onload = () => 
@@ -48,7 +48,7 @@ export class App
 
     private AddHeadText = () => {
         //Here we add our text first, The game will start when click to text.
-        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click attacks, \n arrows moves! \n you can drag and drop! \n PRESS HERE TO START.', {
+        this.headText = new PIXI.Text('Crazy Bunny  🙃 \n Space and click bunny attacks, \n arrows moves! \n you can drag and drop! \n PRESS HERE TO START.', {
             font: "bold 64px Roboto", // Set  style, size and font
             fill: '#3498db', // Set fill color to blue
             align: 'center', // Center align the text, since it's multiline
@@ -138,35 +138,31 @@ export class App
         this.bunnyContainer.addChild(leftArrow)
         this.bunnyContainer.addChild(rightArrow)
         this.mainContainer.addChild(this.bunnyContainer)
-
-       
-        
     }
 
     private onDragStart = (event:any) =>{
         // store a reference to the data
         // the reason for this is because of multitouch
         // we want to track the movement of this particular touch
-        this.data = event.data;
+        this.draggingData = event.data;
         this.dragging = true;
     }
 
     private onDragEnd = () =>{
         this.dragging = false;
         // set the interaction data to null
-        this.data = null;
+        this.draggingData = null;
     }
 
     private onDragMove = () =>
     {
         if (this.dragging)
         {
-            var newPosition = this.data.getLocalPosition(this.bunnyContainer.parent);
+            var newPosition = this.draggingData.getLocalPosition(this.bunnyContainer.parent);
             this.bunnyContainer.x = newPosition.x;
             this.bunnyContainer.y = newPosition.y;
         }
     }
-
 
     private onResize = () => {
         // when resize the screen then all the objects will resize again: Bunny, texts and boxes
