@@ -10,6 +10,9 @@ export class App
     private started:boolean; // checking if game is started. 
     private boxes:Array<PIXI.Sprite>; // the enemy! our bunny will attack with fire and kill them all.. 
     private boxAmount:number = 5 // amount of box(enemy) we want to create.
+    private dragging:boolean;
+    private alpha:number;
+    private data:any;
     constructor() 
     {
         window.onload = () => 
@@ -35,7 +38,7 @@ export class App
         this.game.stage.addChild(this.mainContainer);
 
         this.AddHeadText() // Welcome or head text.
-        this.AddBunny() // Add our hero
+        this.CreateBunny() // Add our hero
         // Move container to the center
         this.LocateObjects()
         window.onresize = this.onResize;
@@ -66,7 +69,7 @@ export class App
         this.mainContainer.addChild(this.headText)
     }
 
-    private AddBunny = () =>{
+    private CreateBunny = () =>{
         this.bunnyContainer = new PIXI.Container(); // crate our bunny container which will have bunny and it's arrow inside. also fireballs later.
         // Get assets
         var textureBunny:any = PIXI.Texture.from('assets/bunny.png');
@@ -82,10 +85,29 @@ export class App
         this.bunnyContainer.x = window.innerWidth / 2 - 50; // for dynamic result
         this.bunnyContainer.y = window.innerHeight - 100;
 
+        // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
+        this.bunny.buttonMode = true;
+
         // it throws fireballs when ckick bunny 
         this.bunny.on('pointertap', () =>{
             this.Attack()
         })
+
+        // Bunny Drag Drop
+        // setup events
+        this.bunny
+        // events for drag start
+        .on('mousedown', this.onDragStart)
+        .on('touchstart', this.onDragStart)
+        // events for drag end
+        .on('mouseup', this.onDragEnd)
+        .on('mouseupoutside', this.onDragEnd)
+        .on('touchend', this.onDragEnd)
+        .on('touchendoutside', this.onDragEnd)
+        // events for drag move
+        .on('mousemove', this.onDragMove)
+        .on('touchmove', this.onDragMove)
+
         // add bunny to bunny container
         this.bunnyContainer.addChild(this.bunny);
 
@@ -110,13 +132,48 @@ export class App
         rightArrow.on('pointertap', () =>{
             this.MoveBunnyRight()
         })
+         
 
         // add arrows to bunny container and bunny container to main container
         this.bunnyContainer.addChild(leftArrow)
         this.bunnyContainer.addChild(rightArrow)
         this.mainContainer.addChild(this.bunnyContainer)
+
+       
         
     }
+
+    private onDragStart = (event:any) =>
+    {
+        console.log(event)
+        // store a reference to the data
+        // the reason for this is because of multitouch
+        // we want to track the movement of this particular touch
+        this.data = event.data;
+        this.alpha = 0.5;
+        this.dragging = true;
+    }
+
+    private onDragEnd = () =>
+    {
+        this.alpha = 1;
+
+        this.dragging = false;
+
+        // set the interaction data to null
+        this.data = null;
+    }
+
+    private onDragMove = () =>
+    {
+        if (this.dragging)
+        {
+            var newPosition = this.data.getLocalPosition(this.bunnyContainer.parent);
+            this.bunnyContainer.x = newPosition.x;
+            this.bunnyContainer.y = newPosition.y;
+        }
+    }
+
 
     private onResize = () => {
         // when resize the screen then all the objects will resize again: Bunny, texts and boxes
