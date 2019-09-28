@@ -59,11 +59,7 @@ export class App
 
 
         this.headText.interactive = true
-        this.headText.on('click', ()=>{
-            this.RemoveDesctiptionsAndStart()
-        })
-
-        this.headText.on('touch', ()=>{
+        this.headText.on('pointertap', ()=>{
             this.RemoveDesctiptionsAndStart()
         })
         
@@ -84,7 +80,7 @@ export class App
         leftArrow.y = this.bunny.y
         leftArrow.anchor.set(0.5)
         leftArrow.interactive = true
-        leftArrow.on('click', () =>{
+        leftArrow.on('pointertap', () =>{
             if(this.bunny.x > 50){
                 this.bunny.x = this.bunny.x -10
             }
@@ -95,7 +91,7 @@ export class App
         rightArrow.y = this.bunny.y
         rightArrow.anchor.set(0.5)
         rightArrow.interactive = true
-        rightArrow.on('click', () =>{
+        rightArrow.on('pointertap', () =>{
             if(window.innerWidth -70> this.bunny.x){
                 this.bunny.x = this.bunny.x +10
             }
